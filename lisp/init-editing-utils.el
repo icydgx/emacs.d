@@ -33,7 +33,17 @@
 
 (transient-mark-mode t)
 
-
+;;---------------------------------------------------
+;; switch C-x , C-t
+(keyboard-translate ?\C-x ?\C-t)
+(keyboard-translate ?\C-t ?\C-x)
+;; (define-key key-translation-map [?\C-t] [?\C-x])
+;; switch M-x , M-t
+(define-key key-translation-map [?\M-x] [?\M-t])
+(define-key key-translation-map [?\M-t] [?\M-x])
+;; switch } , $
+(define-key key-translation-map [?\}] [?\$])
+(define-key key-translation-map [?\$] [?\}])
 
 ;;; Newline behaviour
 

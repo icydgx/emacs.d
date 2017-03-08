@@ -29,7 +29,9 @@
 (add-to-list 'package-archives `("melpa" . ,(if (< emacs-major-version 24)
                                                 "http://melpa.org/packages/"
                                               "http://melpa.org/packages/")))
-
+;;; best for python-mode
+(add-to-list 'package-archives
+             '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 
 
 ;; If gpg cannot be found, signature checking will fail, so we

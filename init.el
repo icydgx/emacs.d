@@ -42,6 +42,100 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
+
+(require 'visual-regexp-steroids)
+(defadvice vr--isearch (around add-case-insensitive (forward string &optional bound noerror count) activate)
+  (when (and (eq vr/engine 'python) case-fold-search)
+    (setq string (concat "(?i)" string)))
+  ad-do-it)
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch, also include the following lines:
+;; (define-key esc-map (kbd "C-r") 'vr/isearch-backward) ;; C-M-r
+;; (define-key esc-map (kbd "C-s") 'vr/isearch-forward) ;; C-M-s
+;; (setq vr/engine 'python)                ;python regexpならばこれ
+;; ;; (setq vr/engine 'pcre2el)               ;elispでPCREから変換
+;; (global-set-key (kbd "M-%") 'vr/query-replace)
+;; ;; multiple-cursorsを使っているならこれで
+;; (global-set-key (kbd "C-c m") 'vr/mc-mark)
+;; ;; 普段の正規表現isearchにも使いたいならこれを
+(global-set-key (kbd "C-M-r") 'vr/isearch-backward)
+(global-set-key (kbd "C-M-s") 'vr/isearch-forward)
+
+;; (defun offlineimap-get-password (host port)
+;;   (require 'netrc)
+;;   (let* ((netrc (netrc-parse (expand-file-name "~/.authinfo.gpg")))
+;;          (hostentry (netrc-machine netrc host port port)))
+;;     (when hostentry (netrc-get hostentry "password"))))
+
+;; (require 'mu4e)
+
+;; ;; default
+;; (setq mu4e-maildir (expand-file-name "~/Maildir"))
+
+;; (setq mu4e-drafts-folder "/[Gmail].Drafts")
+;; (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+;; (setq mu4e-trash-folder  "/[Gmail].Trash")
+
+;; ;; don't save message to Sent Messages, GMail/IMAP will take care of this
+;; (setq mu4e-sent-messages-behavior 'delete)
+
+;; ;; setup some handy shortcuts
+;; (setq mu4e-maildir-shortcuts
+;;       '(("/INBOX"             . ?i)
+;;         ("/[Gmail].Sent Mail" . ?s)
+;;         ("/[Gmail].Trash"     . ?t)))
+
+;; ;; allow for updating mail using 'U' in the main view:
+;; (setq mu4e-get-mail-command "offlineimap")
+
+;; ;; something about ourselves
+;; ;; I don't use a signature...
+;; (setq
+;;  user-mail-address "mikhailcolesty@gmail.com"
+;;  user-full-name  "Ted Cruz"
+;;  ;; message-signature
+;;  ;;  (concat
+;;  ;;    "Foo X. Bar\n"
+;;  ;;    "http://www.example.com\n")
+;;  )
+
+
+;; ;; sending mail -- replace USERNAME with your gmail username
+;; ;; also, make sure the gnutls command line utils are installed
+;; ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
+
+;; (require 'smtpmail)
+
+;; (setq message-send-mail-function 'smtpmail-send-it
+;;       starttls-use-gnutls t
+;;       smtpmail-starttls-credentials
+;;       '(("smtp.gmail.com" 587 nil nil))
+;;       smtpmail-auth-credentials
+;;       (expand-file-name "~/.authinfo.gpg")
+;;       smtpmail-default-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-service 587
+;;       smtpmail-debug-info t)
+
+(require 'init-bongo)
+(require 'init-manage-minor-mode)
+(require 'init-toggle-quotes)
+(require 'init-ace-jump-mode)
+(require-package 'bing-dict)
+;; (setq url-automatic-caching t)
+;; Example Key binding
+(global-set-key (kbd "C-c g") 'bing-dict-brief)
+
+(require-package 'visual-regexp)
+(require-package 'visual-regexp-steroids)
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+
 (require-package 'wgrep)
 (require-package 'browse-kill-ring)
 (require-package 'bbdb)
@@ -80,7 +174,10 @@
 
 (require 'init-frame-hooks)
 (require 'init-xterm)
-; (require 'init-themes)
+;; (require 'init-themes)
+;; Please set your themes directory to 'custom-theme-load-path
+(add-to-list 'custom-theme-load-path
+             (file-name-as-directory "~/.emacs.d/replace-colorthemes/"))
 (require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-dired)

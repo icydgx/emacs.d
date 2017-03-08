@@ -131,7 +131,7 @@ typical word processor."
 ;;; To-do settings
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t!)" "STARTED(s!)" "|" "DONE(d@)")
+      (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "|" "SOMEDAY(S!)" "CANCELLED(c@/!)")
               (sequence "WRITING(W@/!)" "|" "PUBLISHED(p@/!)"))))
 
@@ -139,6 +139,11 @@ typical word processor."
       (quote (("NEXT" :inherit warning)
               ("PROJECT" :inherit font-lock-string-face))))
 
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold))))
 
 
 ;;; Agenda views
@@ -323,12 +328,13 @@ typical word processor."
 ;;                 (insert (match-string 0))))))
 
 (defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  ;; "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-log-states)   ; turn off logging
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
 
 (after-load 'org
+  (define-key org-mode-map (kbd "C-c SPC") nil)
   (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
   (when *is-a-mac*
@@ -353,7 +359,9 @@ typical word processor."
      (screen . nil)
      (,(if (locate-library "ob-sh") 'sh 'shell) . t)
      (sql . nil)
+     (C . t)
      (sqlite . t))))
+
 
 
 (provide 'init-org)
